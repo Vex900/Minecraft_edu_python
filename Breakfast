@@ -1,0 +1,20 @@
+def advice_for_breakfast():
+    breakfast_items = [
+        "cereals + milk",
+        "jogurt + müsli",
+        "fruit mix",
+        "bread and butter and salami and milk",
+        "croissant",
+        "rollswith butter and jam",
+        "corn and barley mash with milk",
+        "protain bar"
+    ]
+    breakfast_items_length = len(breakfast_items)
+    random_index = randint(0, breakfast_items_length - 1)
+    my_breakfast = breakfast_items[random_index]
+    player.say("Ach. I can see. Again, you are undecided about your breakfast menu.")
+    player.say("Do not worry. I can give you advice.")
+    player.say("For this time. Go with " + my_breakfast + ".")
+    player.say("Enjoy your day. :-)")
+
+player.on_chat("breakfast", advice_for_breakfast)
