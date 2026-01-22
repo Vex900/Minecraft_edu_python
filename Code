@@ -1,0 +1,6 @@
+def build_PiramidCity():
+    def build_Piramid(size):
+        agent.set_slot(1)
+        agent.set_assist(PLACE_ON_MOVE, True)
+        agent.move(RIGHT, size)
+        agent.turn(TurnDirection.LEFT)
