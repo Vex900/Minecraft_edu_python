@@ -1,6 +1,25 @@
-def build_PiramidCity():
-    def build_Piramid(size):
-        agent.set_slot(1)
-        agent.set_assist(PLACE_ON_MOVE, True)
-        agent.move(RIGHT, size)
-        agent.turn(TurnDirection.LEFT)
+def on_on_chat(hi):
+    agent.teleport(pos(0, 10, 0), WEST)
+    agent.set_slot(1)
+    while hi > 0:
+        for square in range(4):
+            for side in range(0, hi):
+                agent.place(DOWN)
+                agent.move(FORWARD, 1)
+            agent.turn(LEFT_TURN)
+        agent.move(LEFT, 1)
+        agent.move(UP, 1)
+        agent.move(FORWARD, 1)
+        hi = hi - 2
+    if hi == 0:
+        agent.place(DOWN)
+    agent.teleport(pos(0, 10, 0), WEST)
+    agent.move(LEFT, 10)
+    agent.set_slot(4)
+    agent.place(DOWN)
+    agent.set_slot(3)
+    agent.move(UP, 1)
+    agent.place(DOWN)
+    agent.move(UP, 1)
+    agent.place(DOWN)
+player.on_chat("run", on_on_chat)
