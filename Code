@@ -1,25 +1,57 @@
-def on_on_chat(hi):
-    agent.teleport(pos(0, 10, 0), WEST)
+def build_square(x0, y0, z0, width, slot):
+    agent.set_slot(slot)
+    for dz in range(width):
+        for dx in range(width):
+            agent.teleport(pos(x0 + dx, y0, z0 + dz), WEST)
+            agent.place(DOWN)
+def build_pyramid(x0, y0, z0, size):
     agent.set_slot(1)
-    while hi > 0:
-        for square in range(4):
-            for side in range(0, hi):
-                agent.place(DOWN)
-                agent.move(FORWARD, 1)
-            agent.turn(LEFT_TURN)
-        agent.move(LEFT, 1)
-        agent.move(UP, 1)
-        agent.move(FORWARD, 1)
-        hi = hi - 2
-    if hi == 0:
+    height = size
+    start_x = x0
+    start_y = y0
+    start_z = z0
+    for layer in range(size // 2 + 1):
+        length = size - layer * 2
+        for i in range(length): 
+            agent.teleport(pos(start_x + layer + i, start_y + layer, start_z + layer), WEST)
+            agent.place(DOWN)
+            agent.teleport(pos(start_x + layer + i, start_y + layer, start_z + layer + length - 1), WEST)
+            agent.place(DOWN)
+    for j in range(1, length - 1): 
+        agent.teleport(pos(start_x + layer, start_y + layer, start_z + layer + j), WEST)
         agent.place(DOWN)
-    agent.teleport(pos(0, 10, 0), WEST)
-    agent.move(LEFT, 10)
-    agent.set_slot(4)
+        agent.teleport(pos(start_x + layer + length - 1, start_y + layer, start_z + layer + j), WEST)
+        agent.place(DOWN)
+        agent.teleport(pos(start_x + size // 2, start_y + height // 2, start_z + size // 2), WEST)
+        agent.place(DOWN)
+def build_cactus(x0, y0, z0):
+    agent.set_slot(8)
+    agent.teleport(pos(x0, y0, z0), WEST)
     agent.place(DOWN)
-    agent.set_slot(3)
     agent.move(UP, 1)
     agent.place(DOWN)
-    agent.move(UP, 1)
-    agent.place(DOWN)
+def on_on_chat(size, count):
+    spacing = size + 6
+    total_width = count * spacing
+    x_start = 0
+    y_start = 4
+    z_start = 0
+    build_square(x_start, y_start, z_start, total_width, 1)
+    build_square(x_start, y_start + 1, z_start, total_width, 4)
+    for p in range(count):
+        x_p = x_start + p * spacing + spacing // 2
+        z_p = z_start + total_width // 2
+        y_p = y_start + 2
+        build_pyramid(x_p, y_p, z_p, size)
+        agent.set_slot(9)
+        agent.teleport(pos(x_p, y_p, z_p), WEST)
+        agent.place(DOWN)
+    if p % 2 == 1:
+        agent.set_slot(10)
+        agent.place(DOWN)
+    if p < count - 1:
+        x_c = x_start + p * spacing + spacing
+        z_c = z_start + total_width // 2
+        y_c = y_start + 2
+        build_cactus(x_c, y_c, z_c)
 player.on_chat("run", on_on_chat)
